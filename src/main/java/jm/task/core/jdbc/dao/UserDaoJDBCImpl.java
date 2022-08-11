@@ -10,7 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoJDBCImpl extends Util implements UserDao {
+public class UserDaoJDBCImpl implements UserDao {
     private final String CREATE_USER_TABLE = """
             CREATE TABLE IF NOT EXISTS users(id INT  NOT NULL AUTO_INCREMENT,
                                                name VARCHAR(45) NULL,
@@ -29,7 +29,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             DELETE FROM users;
             """;
 
-    private final String REMOVE_USER_TABLE = """
+    private final String CLEAR_USER_TABLE = """
             DELETE FROM users 
             WHERE id = ?;
             """;
@@ -42,36 +42,36 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     }
 
     public void createUsersTable() {
-        try (Statement state = super.getConnection().createStatement()) {
-            state.executeUpdate(CREATE_USER_TABLE);
+        try (Statement userTablePreparedStatement = Util.getConnection().createStatement()) {
+            userTablePreparedStatement.executeUpdate(CREATE_USER_TABLE);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void dropUsersTable() {
-        try (PreparedStatement state = super.getConnection().prepareStatement(DROP_USER_TABLE)) {
-            state.executeUpdate();
+        try (PreparedStatement userTablePreparedStatement = Util.getConnection().prepareStatement(DROP_USER_TABLE)) {
+            userTablePreparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (PreparedStatement state = super.getConnection().prepareStatement(INSERT_USER_TABLE)) {
-            state.setString(1, name);
-            state.setString(2, lastName);
-            state.setLong(3, age);
-            state.executeUpdate();
+        try (PreparedStatement userTablePreparedStatement = Util.getConnection().prepareStatement(INSERT_USER_TABLE)) {
+            userTablePreparedStatement.setString(1, name);
+            userTablePreparedStatement.setString(2, lastName);
+            userTablePreparedStatement.setLong(3, age);
+            userTablePreparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void removeUserById(long id) {
-        try (PreparedStatement state = super.getConnection().prepareStatement(REMOVE_USER_TABLE)) {
-            state.setLong(1, id);
-            state.executeUpdate();
+        try (PreparedStatement userTablePreparedStatement = Util.getConnection().prepareStatement(CLEAR_USER_TABLE)) {
+            userTablePreparedStatement.setLong(1, id);
+            userTablePreparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -79,13 +79,13 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> result = new ArrayList<>();
-        try (PreparedStatement state = super.getConnection().prepareStatement(GET_ALL_USER_TABLE)) {
-            ResultSet resSet = state.executeQuery();
-            while (resSet.next()) {
-                result.add(new User(resSet.getLong("id"),
-                        resSet.getString("name"),
-                        resSet.getString("lastname"),
-                        (byte) resSet.getLong("age")));
+        try (PreparedStatement userTablePreparedStatement = Util.getConnection().prepareStatement(GET_ALL_USER_TABLE)) {
+            ResultSet userTableResultSet = userTablePreparedStatement.executeQuery();
+            while (userTableResultSet.next()) {
+                result.add(new User(userTableResultSet.getLong("id"),
+                        userTableResultSet.getString("name"),
+                        userTableResultSet.getString("lastname"),
+                        (byte) userTableResultSet.getLong("age")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -94,8 +94,8 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try (PreparedStatement state = super.getConnection().prepareStatement(DETETE_USER_TABLE)) {
-            state.executeUpdate();
+        try (PreparedStatement userTablePreparedStatement = Util.getConnection().prepareStatement(DETETE_USER_TABLE)) {
+            userTablePreparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
