@@ -8,15 +8,15 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-        UserService testUser = new UserServiceImpl();
-        testUser.createUsersTable();
-        testUser.saveUser("Алексей", "Малинин", (byte) 25);
-        testUser.saveUser("Георгий", "Брынза", (byte) 34);
-        testUser.saveUser("Василий", "Пупкин", (byte) 47);
-        testUser.saveUser("Николай", "Николаев", (byte) 22);
-        List<User> allUsers = testUser.getAllUsers();
+        UserService us = new UserServiceImpl();
+        us.createUsersTable();
+        us.saveUser("Алексей", "Малинин", (byte) 25);
+        us.saveUser("Георгий", "Брынза", (byte) 34);
+        us.saveUser("Василий", "Пупкин", (byte) 47);
+        us.saveUser("Николай", "Николаев", (byte) 22);
+        List<User> allUsers = us.getAllUsers();
         allUsers.forEach(System.out::println);
-        testUser.cleanUsersTable();
-        testUser.dropUsersTable();
+        us.cleanUsersTable();
+        us.dropUsersTable();
     }
 }
