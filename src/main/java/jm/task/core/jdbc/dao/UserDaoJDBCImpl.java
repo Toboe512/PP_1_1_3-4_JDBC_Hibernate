@@ -12,30 +12,30 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
     private final String CREATE_USER_TABLE = """
-            CREATE TABLE IF NOT EXISTS users(id INT  NOT NULL AUTO_INCREMENT,
+            CREATE TABLE IF NOT EXISTS user(id INT  NOT NULL AUTO_INCREMENT,
                                                name VARCHAR(45) NULL,
                                                lastname VARCHAR(45) NULL,
                                                age INT NULL,
                                                PRIMARY KEY (id));
             """;
     private final String DROP_USER_TABLE = """
-            DROP TABLE IF EXISTS users;
+            DROP TABLE IF EXISTS user;
             """;
     private final String INSERT_USER_TABLE = """
-            INSERT INTO users(name, lastname, age)
+            INSERT INTO user(name, lastname, age)
             VALUES (?, ?, ?);
             """;
     private final String DETETE_USER_TABLE = """
-            DELETE FROM users;
+            DELETE FROM user;
             """;
 
     private final String CLEAR_USER_TABLE = """
-            DELETE FROM users 
+            DELETE FROM user 
             WHERE id = ?;
             """;
     private final String GET_ALL_USER_TABLE = """
             SELECT *
-            FROM users
+            FROM user
             """;
 
     public UserDaoJDBCImpl() {
